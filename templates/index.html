@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plant Data</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Plant Data</h1>
+
+    <button id="add-plant-btn">Add Plant</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image URL</th>
+                <th>Sunlight</th>
+                <th>Water Needs</th>
+                <th>Temperature Range</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plant in plants %}
+            <tr>
+                <td>{{ plant.name }}</td>
+                <td>{{ plant.description }}</td>
+                <td>{{ plant.image_url }}</td>
+                <td>{{ plant.sunlight }}</td>
+                <td>{{ plant.water_needs }}</td>
+                <td>{{ plant.temperature_range }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        var addPlantBtn = document.getElementById('add-plant-btn');
+        addPlantBtn.addEventListener('click', function() {
+            window.location.href = "{{ url_for('add_plant') }}";
+        });
+    </script>
+</body>
+</html>
