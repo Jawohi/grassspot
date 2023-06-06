@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulma.css') }}">
+</head>
+<body>
+    <!-- Include common header, navigation, etc. -->
+    
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Include common footer, scripts, etc. -->
+</body>
+</html>

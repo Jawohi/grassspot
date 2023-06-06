@@ -13,23 +13,22 @@ def index():
     plants = Plant.get_all()
     return render_template('index.html', plants=plants)
 
-@app.route('/add-plant', methods=['GET', 'POST'])
+@app.route('/add-plant', methods=['POST'])
 def add_plant():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
-        image_url = request.form.get('image_url')
-        sunlight = request.form.get('sunlight')
-        water_needs = request.form.get('water_needs')
-        temperature_range = request.form.get('temperature_range')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    image_url = request.form.get('image_url')
+    sunlight = request.form.get('sunlight')
+    water_needs = request.form.get('water_needs')
+    temperature_range = request.form.get('temperature_range')
 
-        # Create a new plant object
-        plant = Plant(ObjectId(),name, description, image_url, sunlight, water_needs, temperature_range)
-        plant.save()
+    # Create a new plant object
+    plant = Plant(ObjectId(),name, description, image_url, sunlight, water_needs, temperature_range)
+    plant.save()
 
-        return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
-    return render_template('add_plant.html')
+    
 
 if __name__ == '__main__':
     app.run()
