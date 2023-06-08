@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My App</title>
+    <title>GrassSpot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bulma.css') }}">
 </head>
 <body>
-    <!-- Include common header, navigation, etc. -->
+    <header>
+        <!-- Add the header content -->
+    </header>
     
-    <div class="container">
+    <nav>
+        <!-- Add the navigation menu -->
+    </nav>
+    
+    <main>
+        <!-- The content of child pages will go here -->
         {% block content %}
         {% endblock %}
-    </div>
-
-    <!-- Include common footer, scripts, etc. -->
+    </main>
+    
+    <footer>
+        <!-- Add the footer content -->
+    </footer>
 </body>
 </html>

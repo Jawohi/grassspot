@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Plant Data</h1>
+
+    <!-- Button to trigger the modal -->
+    <button class="button is-primary" id="addPlantButton">Add Plant</button>
+
+    <!-- Modal -->
+    <div class="modal" id="addPlantModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Add Plant</p>
+            <button class="delete" aria-label="close" id="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- Form inputs for plant data -->
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input class="input" type="text" id="name" name="name" placeholder="Enter plant name">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea class="textarea" id="description" name="description" placeholder="Enter plant description"></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Image URL</label>
+                <div class="control">
+                    <input class="input" type="text" id="image_url" name="image_url" placeholder="Enter image URL">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Sunlight</label>
+                <div class="control">
+                    <input class="input" type="text" id="sunlight" name="sunlight" placeholder="Enter sunlight requirements">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Water Needs</label>
+                <div class="control">
+                    <input class="input" type="text" id="water_needs" name="water_needs" placeholder="Enter water needs">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Temperature Range</label>
+                <div class="control">
+                    <input class="input" type="text" id="temperature_range" name="temperature_range" placeholder="Enter temperature range">
+                </div>
+            </div>
+
+            
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-primary" id="submitPlant">Submit</button>
+            <button class="button" id="cancelPlant">Cancel</button>
+        </footer>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image URL</th>
+                <th>Sunlight</th>
+                <th>Water Needs</th>
+                <th>Temperature Range</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plant in plants %}
+            <tr>
+                <td>{{ plant.name }}</td>
+                <td>{{ plant.description }}</td>
+                <td>{{ plant.image_url }}</td>
+                <td>{{ plant.sunlight }}</td>
+                <td>{{ plant.water_needs }}</td>
+                <td>{{ plant.temperature_range }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        // Open the modal when the button is clicked
+        document.getElementById('addPlantButton').addEventListener('click', function() {
+            document.getElementById('addPlantModal').classList.add('is-active');
+        });
+    
+        // Close the modal when the close button is clicked
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('addPlantModal').classList.remove('is-active');
+        });
+    
+        // Submit the form data when the submit button is clicked
+        document.getElementById('submitPlant').addEventListener('click', function() {
+            // Retrieve form data and send it to the server using fetch or AJAX
+            // Retrieve form data
+            var name = document.getElementById('name').value;
+            var description = document.getElementById('description').value;
+            var imageUrl = document.getElementById('image_url').value;
+            var sunlight = document.getElementById('sunlight').value;
+            var waterNeeds = document.getElementById('water_needs').value;
+            var temperatureRange = document.getElementById('temperature_range').value;
+    
+           // Create an object with the form data
+            var formData = new URLSearchParams();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('image_url', imageUrl);
+            formData.append('sunlight', sunlight);
+            formData.append('water_needs', waterNeeds);
+            formData.append('temperature_range', temperatureRange);
+
+            // Send the form data to the server using fetch or AJAX
+            fetch('/add-plant', {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    // Redirect to the index page after successful submission
+                    window.location.href = '/';
+                } else {
+                    // Handle error cases
+                    console.error('Failed to add plant');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        });
+    
+        // Close the modal when the cancel button is clicked
+        document.getElementById('cancelPlant').addEventListener('click', function() {
+            document.getElementById('addPlantModal').classList.remove('is-active');
+        });
+    </script>
+    
+    
+      
+{% endblock %}

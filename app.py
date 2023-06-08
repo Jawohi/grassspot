@@ -11,7 +11,7 @@ app.config['MONGO_URI'] = 'mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster
 @app.route('/')
 def index():
     plants = Plant.get_all()
-    return render_template('index.html', plants=plants)
+    return render_template('plant_overview.html', plants=plants)
 
 @app.route('/add-plant', methods=['POST'])
 def add_plant():
