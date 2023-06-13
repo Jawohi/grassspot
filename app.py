@@ -12,6 +12,7 @@ app.config['SECRET_KEY'] = '7763fa0b8072a082a17dd9e52721bb2e'
 app.config['MONGO_URI'] = 'mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/Grassspot_DB'
 
 login_manager = LoginManager(app)
+login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 
@@ -24,8 +25,9 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
+    print(current_user)  # Debug statement
     plants = Plant.get_all()
-    return render_template('plant_overview.html', plants=plants)
+    return render_template('plant_overview.html', plants=plants, current_user=current_user)
 
 @app.route('/add-plant', methods=['POST'])
 def add_plant():

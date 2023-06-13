@@ -11,7 +11,7 @@ users_collection = db['users']
 
 class User(UserMixin):
     def __init__(self, user_data):
-        self.id = user_data['_id']
+        self.id = str(user_data.get('_id')) if user_data.get('_id') else None
         self.username = user_data['username']
         self.password_hash = user_data['password']
 
