@@ -20,7 +20,7 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     # Implement a function to load and return the user object based on the user_id
     return User.get(user_id)
-
+ 
 
 
 @app.route('/')

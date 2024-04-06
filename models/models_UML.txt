@@ -1,0 +1,15 @@
+@startuml
+class Plant {
+    save()
+    get_all()
+        _id
+    name
+    description
+    image_url
+    sunlight
+    water_needs
+    temperature_range
+    created_at
+    __init__()
+}
+@enduml
