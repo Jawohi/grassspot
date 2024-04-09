@@ -21,9 +21,43 @@ class Plant:
 
     def save(self):
         plants_collection.insert_one(self.__dict__)
-
+    
+    @staticmethod
+    def get_by_id(plant_id):
+        # Query the database to fetch the plant with the specified ID
+        plant_data = plants_collection.find_one({'_id': ObjectId(plant_id)})
+        if plant_data:
+            return Plant(**plant_data)
+        else:
+            return None
+        
     @staticmethod
     def get_all():
         #plants = plants_collection.find()
         plants = plants_collection.find(projection={"created_at": False})
         return [Plant(**plant) for plant in plants]
+
+    
+
+class CareJournalEntry:
+    def __init__(self, _id, plant_id, user_id, entry_date, notes, images):
+        self._id = _id
+        self.plant_id = plant_id
+        self.user_id = user_id
+        self.entry_date = entry_date
+        self.notes = notes
+        self.images = images
+    
+    @staticmethod
+    def get_entries_by_plant_id(plant_id):
+        # Query the database to fetch care journal entries for the given plant_id
+        entries = db['Care_journal_entries'].find({'plant_id': plant_id})
+        return [CareJournalEntry(**entry) for entry in entries]
+
+class Image:
+    def __init__(self, _id, filename, url, uploaded_by, uploaded_at):
+        self._id = _id
+        self.filename = filename
+        self.url = url
+        self.uploaded_by = uploaded_by
+        self.uploaded_at = uploaded_at
