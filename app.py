@@ -53,25 +53,34 @@ def care_journal(plant_id):
     # Fetch the care journal entries for the plant from the database
     care_journal_entries = CareJournalEntry.get_entries_by_plant_id(plant_id)
     # Render the care journal template with the plant details and care journal entries
-    return render_template('care_journal.html', plant=plant, care_journal_entries=care_journal_entries)
+    return render_template('care_journal.html', plant=plant, plant_id=plant_id, care_journal_entries=care_journal_entries)
 
-@app.route('/add-entry/<plant_id>', methods=['GET', 'POST'])
-@login_required
+
+
+@app.route('/add-entry/<plant_id>', methods=['POST'])
+#@login_required
 def add_entry(plant_id):
     if request.method == 'POST':
         # Get form data
-        user_id = current_user._id
-        entry_date = datetime.now().isoformat()
+        user_id = "development"
+        entry_date = request.form.get('entry_date')
         notes = request.form.get('notes')
+
         # Handle image upload if needed
-        
-        # Create a new entry object
-        new_entry = CareJournalEntry(plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes)
+        if 'image' in request.files:
+            images = request.files['image']
+            # Speichern Sie das Bild an einem Speicherort Ihrer Wahl und erfassen Sie die Bild-URL
+            # Fügen Sie die Bild-URL dann dem entsprechenden Datenbankeintrag hinzu
+        else:
+            images = []
+        # Erstellen eines neuen Eintrags
+        new_entry = CareJournalEntry(ObjectId(),plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=images)
         new_entry.save()
         return redirect(url_for('view_care_journal', plant_id=plant_id))
 
-    # Render the care_journal.html template with the add entry modal open
-    return render_template('care_journal.html', plant_id=plant_id, show_add_entry_modal=True)
+    # Fügen Sie hier die Fehlerbehandlung hinzu, falls erforderlich
+
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
