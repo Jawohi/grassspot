@@ -7,6 +7,7 @@ from bson import ObjectId
 client = MongoClient('mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/')
 db = client['Grassspot_DB']
 plants_collection = db['plants']
+entries_collection = db['care_journal_entries']
 
 class Plant:
     def __init__(self, _id, name, description, image_url, sunlight, water_needs, temperature_range):
@@ -51,8 +52,11 @@ class CareJournalEntry:
     @staticmethod
     def get_entries_by_plant_id(plant_id):
         # Query the database to fetch care journal entries for the given plant_id
-        entries = db['Care_journal_entries'].find({'plant_id': plant_id})
+        entries = entries_collection.find({'plant_id': plant_id})
         return [CareJournalEntry(**entry) for entry in entries]
+    
+    def save(self):
+        entries_collection.insert_one(self.__dict__)
 
 class Image:
     def __init__(self, _id, filename, url, uploaded_by, uploaded_at):

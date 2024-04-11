@@ -6,16 +6,28 @@
     <!-- Button to trigger the modal -->
     <button class="button is-primary" id="addEntryButton">Add Entry</button>
 
-    <!-- Modal -->
+   <!-- Modal -->
     <div class="modal" id="addEntryModal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title">Add Entry</p>
-            <button class="delete" aria-label="close" id="closeModal"></button>
-        </header>
-        <section class="modal-card-body">
-            <!-- Form inputs for care journal entry -->
+    <div class="modal-background"></div>
+    <div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">Add Entry</p>
+        <button class="delete" aria-label="close" id="closeModal"></button>
+    </header>
+    <section class="modal-card-body">
+        <!-- Label für die Anzeige der plant_id -->
+        <div class="field">
+            <label class="label">Plant ID</label>
+            <div class="control">
+                <p>{{ plant_id }}</p>
+            </div>
+        </div>
+
+        <!-- Form inputs for care journal entry -->
+        <form id="entryForm" method="POST" action="{{ url_for('add_entry', plant_id=plant_id) }}" enctype="multipart/form-data">
+            <!-- Hidden input field to store the plant_id -->
+            <input type="hidden" id="plant_id" name="plant_id" value="{{ plant_id }}">
+
             <div class="field">
                 <label class="label">Date</label>
                 <div class="control">
@@ -36,14 +48,16 @@
                     <input class="input" type="file" id="image" name="image">
                 </div>
             </div>
-        </section>
-        
-        <footer class="modal-card-foot">
-            <button class="button is-primary" id="submitEntry">Submit</button>
-            <button class="button" id="cancelEntry">Cancel</button>
-        </footer>
-        </div>
+        </form>
+    </section>
+    
+    <footer class="modal-card-foot">
+        <button class="button is-primary" id="submitEntry">Submit</button>
+        <button class="button" id="cancelEntry">Cancel</button>
+    </footer>
     </div>
+    </div>
+
 
     <table>
         <thead>
@@ -74,36 +88,11 @@
         document.getElementById('closeModal').addEventListener('click', function() {
             document.getElementById('addEntryModal').classList.remove('is-active');
         });
-    
+
         // Submit the form data when the submit button is clicked
         document.getElementById('submitEntry').addEventListener('click', function() {
-            // Retrieve form data and send it to the server using fetch or AJAX
-            // Retrieve form data
-            var entryDate = document.getElementById('entry_date').value;
-            var notes = document.getElementById('notes').value;
-    
-            // Create an object with the form data
-            var formData = new FormData();
-            formData.append('entry_date', entryDate);
-            formData.append('notes', notes);
-
-            // Send the form data to the server using fetch or AJAX
-            fetch('/add-entry', {
-                method: 'POST',
-                body: formData
-            })
-            .then(function(response) {
-                if (response.ok) {
-                    // Redirect to the current page after successful submission
-                    window.location.reload();
-                } else {
-                    // Handle error cases
-                    console.error('Failed to add entry');
-                }
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-            });
+            // Submit the form data
+            document.getElementById('entryForm').submit();
         });
     
         // Close the modal when the cancel button is clicked
