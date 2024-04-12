@@ -24,7 +24,6 @@ class User(UserMixin):
 
     def save(self):
         user_data = {
-            '_id': ObjectId(self.id) if self.id else None,
             'username': self.username,
             'password': self.password_hash
         }
