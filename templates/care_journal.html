@@ -72,6 +72,8 @@
             <tr>
                 <td>{{ entry.entry_date }}</td>
                 <td>{{ entry.notes }}</td>
+                <img src="{{ entry.images[0] }}" alt="Plant Image">
+
                 <!-- Additional columns can be displayed here if needed -->
             </tr>
             {% endfor %}

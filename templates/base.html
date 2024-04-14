@@ -13,21 +13,25 @@
         <!-- Add the navigation menu -->
         <ul class="navbar-nav ml-auto">
             {% if current_user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-            </li>
+                <div>
+                    Hallo, {{ current_user.username }}!
+                    <form action="{{ url_for('logout') }}" method="post">
+                        <button type="submit" class="button is-danger">Logout</button>
+                    </form>
+                </div>
             {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="/">Overview</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-            </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                </li>
             {% endif %}
+            <li class="nav-item">
+                <a href="/" class="nav-link">Overview</a>
+            </li>
         </ul>
+        
         
     </nav>
     

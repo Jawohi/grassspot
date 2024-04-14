@@ -35,7 +35,10 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
+        print("User ID:", user_id)
+        user_id = ObjectId(user_id)
         user_data = users_collection.find_one({'_id': user_id})
+        print("User data:", user_data)
         if user_data:
             return User(user_data)
         return None
@@ -46,3 +49,6 @@ class User(UserMixin):
         if user_data:
             return User(user_data)
         return None
+
+    def __repr__(self):
+        return f"User(id={self.id}, username={self.username})"

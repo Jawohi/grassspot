@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from models.models import Plant, CareJournalEntry, db
 from models.user import User
 from bson import ObjectId
 from datetime import datetime
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 import bcrypt
 
 
@@ -16,21 +17,51 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    print("Unauthorized access detected")  # Debug statement
+    print("Current user:", current_user)  # Debug statement
+    return redirect(url_for('login'))
 
 @login_manager.user_loader
 def load_user(user_id):
     # Implement a function to load and return the user object based on the user_id
+    print("User loader called with user_id:", user_id)  # Debug statement
+    print("User.get:", User.get(user_id))
     return User.get(user_id)
  
+
+# Konfiguration für Bild-Uploads
+photos = UploadSet('photos', IMAGES)
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/images'  # Pfad zum Speichern der Bilder
+configure_uploads(app, photos)
 
 
 @app.route('/')
 def index():
-    print(current_user)  # Debug statement
-    plants = Plant.get_all()
-    return render_template('plant_overview.html', plants=plants, current_user=current_user)
+    # Überprüfen Sie, ob der Benutzer authentifiziert ist
+    print("INDEX - current user:",current_user)
+    print("INDEX - current user auth:",current_user.is_authenticated)
+    if current_user.is_authenticated:
+        # Wenn ja, rufen Sie die Hauptseite normal auf
+        print(current_user)  # Debug statement
+        print("INDEX")
+        
+        print("Next URL stored in session:", session.get('next'))  # Debug statement
+
+        
+        plants = Plant.get_all()
+        return render_template('plant_overview.html', plants=plants, current_user=current_user)
+    else:
+        # Wenn der Benutzer nicht authentifiziert ist, speichern Sie die angeforderte URL in der Sitzung und leiten Sie ihn zur Login-Seite weiter
+        print("Session before saving next URL:", session)  # Debug statement
+        session['next'] = request.path
+        print("Session after saving next URL:", session)  # Debug statement
+
+        return redirect(url_for('login'))
 
 @app.route('/add-plant', methods=['POST'])
+@login_required
 def add_plant():
     name = request.form.get('name')
     description = request.form.get('description')
@@ -58,41 +89,54 @@ def care_journal(plant_id):
 
 
 @app.route('/add-entry/<plant_id>', methods=['POST'])
-#@login_required
+@login_required
 def add_entry(plant_id):
     if request.method == 'POST':
-        # Get form data
-        user_id = "development"
+        user_id = current_user.id
         entry_date = request.form.get('entry_date')
         notes = request.form.get('notes')
 
-        # Handle image upload if needed
+        # Handle image upload
         if 'image' in request.files:
-            images = request.files['image']
-            # Speichern Sie das Bild an einem Speicherort Ihrer Wahl und erfassen Sie die Bild-URL
-            # Fügen Sie die Bild-URL dann dem entsprechenden Datenbankeintrag hinzu
+            image_filename = photos.save(request.files['image'])
+            image_url = photos.url(image_filename)
         else:
-            images = []
-        # Erstellen eines neuen Eintrags
-        new_entry = CareJournalEntry(ObjectId(),plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=images)
-        new_entry.save()
-        return redirect(url_for('view_care_journal', plant_id=plant_id))
+            image_url = None
 
-    # Fügen Sie hier die Fehlerbehandlung hinzu, falls erforderlich
+        # Erstellen eines neuen Eintrags
+        new_entry = CareJournalEntry(ObjectId(), plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=[image_url])
+        new_entry.save()
+
+        return redirect(url_for('care_journal', plant_id=plant_id))
+
 
 
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    print("Login function called")
+    
+    print("Login route called with method:", request.method)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
         user = User.get_by_username(username)
+        print("User :",user)
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('index'))
+            print("User successfully logged in:", current_user)  # Debug statement
+            
+            # Redirect to the requested URL stored in session or to the index page if there is none
+            next_url = session.get('next', None)
+            print("Next URL:", next_url)  # Debug statement
+            
+            if next_url:
+                session.pop('next')  # Clear the stored URL from session
+                return redirect(next_url)
+            else:
+                return redirect(url_for('index'))
         else:
             return render_template('login.html', error='Invalid username or password')
 
@@ -122,7 +166,7 @@ def register():
 
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
