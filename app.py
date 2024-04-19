@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from models.models import Plant, CareJournalEntry, db
 from models.user import User
@@ -63,18 +63,25 @@ def index():
 @app.route('/add-plant', methods=['POST'])
 @login_required
 def add_plant():
-    name = request.form.get('name')
-    description = request.form.get('description')
-    image_url = request.form.get('image_url')
-    sunlight = request.form.get('sunlight')
-    water_needs = request.form.get('water_needs')
-    temperature_range = request.form.get('temperature_range')
+    try:
+        name = request.form.get('name')
+        if not name:
+            return jsonify({'status': 'error', 'message': 'Der Name der Pflanze ist erforderlich.'}), 400
 
-    # Create a new plant object
-    plant = Plant(ObjectId(),name, description, image_url, sunlight, water_needs, temperature_range)
-    plant.save()
+        description = request.form.get('description', '')
+        image_url = request.form.get('image_url', '')
+        sunlight = request.form.get('sunlight', '')
+        water_needs = request.form.get('water_needs', '')
+        temperature_range = request.form.get('temperature_range', '')
 
-    return redirect(url_for('index'))
+        # Erstellung des Pflanzenobjekts und Speichern in der Datenbank
+        plant = Plant(ObjectId(), name, description, image_url, sunlight, water_needs, temperature_range)
+        plant.save()
+
+        return jsonify({'status': 'success', 'message': 'Pflanze erfolgreich hinzugefügt.'})
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': f'Fehler beim Hinzufügen der Pflanze: {str(e)}'}), 500
 
 
 @app.route('/care-journal/<plant_id>', methods=['GET'])
@@ -82,7 +89,9 @@ def care_journal(plant_id):
     # Fetch the plant details based on the provided plant_id
     plant = Plant.get_by_id(plant_id)
     # Fetch the care journal entries for the plant from the database
+    print("Plant ID:", plant_id)
     care_journal_entries = CareJournalEntry.get_entries_by_plant_id(plant_id)
+    print("Care journal entries:", care_journal_entries)
     # Render the care journal template with the plant details and care journal entries
     return render_template('care_journal.html', plant=plant, plant_id=plant_id, care_journal_entries=care_journal_entries)
 
@@ -96,19 +105,22 @@ def add_entry(plant_id):
         entry_date = request.form.get('entry_date')
         notes = request.form.get('notes')
 
+        # Umwandeln des empfangenen Datums in ein datetime Objekt
+        if entry_date:
+            entry_date = datetime.strptime(entry_date, '%Y-%m-%d')
+
         # Handle image upload
-        if 'image' in request.files:
+        if 'image' in request.files and request.files['image'].filename != '':
             image_filename = photos.save(request.files['image'])
-            image_url = photos.url(image_filename)
+            image_url = 'images/' + image_filename
         else:
             image_url = None
 
-        # Erstellen eines neuen Eintrags
-        new_entry = CareJournalEntry(ObjectId(), plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=[image_url])
+        # Erstellen eines neuen Eintrags mit bedingter Bildliste
+        new_entry = CareJournalEntry(ObjectId(), plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=[image_url] if image_url else [])
         new_entry.save()
 
         return redirect(url_for('care_journal', plant_id=plant_id))
-
 
 
 

@@ -52,7 +52,7 @@ class CareJournalEntry:
     @staticmethod
     def get_entries_by_plant_id(plant_id):
         # Query the database to fetch care journal entries for the given plant_id
-        entries = entries_collection.find({'plant_id': plant_id})
+        entries = entries_collection.find({'plant_id': ObjectId(plant_id)})
         return [CareJournalEntry(**entry) for entry in entries]
     
     def save(self):
