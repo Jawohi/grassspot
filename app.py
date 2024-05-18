@@ -1,17 +1,35 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from models.models import Plant, CareJournalEntry, db
+from dotenv import load_dotenv, find_dotenv
 from models.user import User
 from bson import ObjectId
 from datetime import datetime
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 import bcrypt
+import os
 
+# Pfad zur .env-Datei korrekt ermitteln und laden
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path)
+
+print("Working directory:", dotenv_path)
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "763fa0b8072a082a17dd9e52721bb2e"
+app.config['MONGO_URI'] = "mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/Grassspot_DB"
+app.config['UPLOADED_PHOTOS_DEST'] = "static/images"
 
-app.config['SECRET_KEY'] = '7763fa0b8072a082a17dd9e52721bb2e'
-app.config['MONGO_URI'] = 'mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/Grassspot_DB'
+
+
+# Konfiguration für Bild-Uploads
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
+
+
+ 
+
+
 
 login_manager = LoginManager(app)
 login_manager.init_app(app)
@@ -31,10 +49,7 @@ def load_user(user_id):
     return User.get(user_id)
  
 
-# Konfiguration für Bild-Uploads
-photos = UploadSet('photos', IMAGES)
-app.config['UPLOADED_PHOTOS_DEST'] = 'static/images'  # Pfad zum Speichern der Bilder
-configure_uploads(app, photos)
+
 
 
 @app.route('/')
@@ -60,6 +75,9 @@ def index():
 
         return redirect(url_for('login'))
 
+
+
+
 @app.route('/add-plant', methods=['POST'])
 @login_required
 def add_plant():
@@ -75,13 +93,69 @@ def add_plant():
         temperature_range = request.form.get('temperature_range', '')
 
         # Erstellung des Pflanzenobjekts und Speichern in der Datenbank
-        plant = Plant(ObjectId(), name, description, image_url, sunlight, water_needs, temperature_range)
+        plant = Plant(ObjectId(), name, description, image_url, sunlight, water_needs, temperature_range, status='active')
         plant.save()
 
         return jsonify({'status': 'success', 'message': 'Pflanze erfolgreich hinzugefügt.'})
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'Fehler beim Hinzufügen der Pflanze: {str(e)}'}), 500
+
+
+@app.route('/update-plant/<plant_id>', methods=['POST'])
+@login_required
+def update_plant(plant_id):
+    try:
+        # Daten aus dem Formular abrufen
+        name = request.form.get('name')
+        description = request.form.get('description', '')
+        sunlight = request.form.get('sunlight', '')
+        water_needs = request.form.get('water_needs', '')
+        temperature_range = request.form.get('temperature_range', '')
+
+        # Pflanze in der Datenbank finden
+        plant = Plant.get_by_id(plant_id)
+        if not plant:
+            flash('Pflanze nicht gefunden.', 'error')
+            return redirect(url_for('index'))
+
+        # Pflanzendetails aktualisieren
+        plant.name = name
+        plant.description = description
+        plant.sunlight = sunlight
+        plant.water_needs = water_needs
+        plant.temperature_range = temperature_range
+        plant.save()  # Speichern der Änderungen
+
+        flash('Pflanze erfolgreich aktualisiert.', 'success')
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        flash(f'Fehler beim Aktualisieren der Pflanze: {str(e)}', 'error')
+        return redirect(url_for('index'))
+
+
+
+@app.route('/deactivate-plant/<plant_id>', methods=['POST'])
+@login_required
+def deactivate_plant(plant_id):
+    try:
+        # Pflanze in der Datenbank finden
+        plant = Plant.get_by_id(plant_id)
+        if not plant:
+            flash('Pflanze nicht gefunden.', 'error')
+            return redirect(url_for('index'))
+
+        # Pflanze als inaktiv markieren
+        plant.status = 'inactive'
+        plant.save()  # Änderungen speichern
+
+        flash('Pflanze wurde erfolgreich deaktiviert.', 'success')
+        return redirect(url_for('index'))
+
+    except Exception as e:
+        flash(f'Fehler beim Deaktivieren der Pflanze: {str(e)}', 'error')
+        return redirect(url_for('index'))
 
 
 @app.route('/care-journal/<plant_id>', methods=['GET'])
@@ -117,7 +191,7 @@ def add_entry(plant_id):
             image_url = None
 
         # Erstellen eines neuen Eintrags mit bedingter Bildliste
-        new_entry = CareJournalEntry(ObjectId(), plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=[image_url] if image_url else [])
+        new_entry = CareJournalEntry(ObjectId(), plant_id=ObjectId(plant_id), user_id=user_id, entry_date=entry_date, notes=notes, images=[image_url] if image_url else [], status='active')
         new_entry.save()
 
         return redirect(url_for('care_journal', plant_id=plant_id))
