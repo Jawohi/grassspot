@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Care Journal</h1>
+<h1>Pflegetagebuch für {{ plant.name }}</h1>
+
+    <!-- Anzeige der Pflanzendetails -->
+    <div class="plant-details">
+        <p><strong>Name:</strong> {{ plant.name }}</p>
+        <p><strong>Beschreibung:</strong> {{ plant.description }}</p>
+        <p><strong>Bild-URL:</strong> <a href="{{ plant.image_url }}" target="_blank">Bild ansehen</a></p>
+        <p><strong>Sonnenlicht:</strong> {{ plant.sunlight }}</p>
+        <p><strong>Wasserbedarf:</strong> {{ plant.water_needs }}</p>
+        <p><strong>Temperaturbereich:</strong> {{ plant.temperature_range }}</p>
+        <p><strong>Status:</strong> {{ plant.status }}</p>
+    </div>
 
     <!-- Button to trigger the modal -->
     <button class="button is-primary" id="addEntryButton">Add Entry</button>

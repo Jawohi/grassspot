@@ -90,6 +90,8 @@
                 <td>{{ plant.water_needs }}</td>
                 <td>{{ plant.temperature_range }}</td>
                 <td>
+                    <button class="button is-warning update-button" data-id="{{ plant._id }}"><i class="fas fa-edit"></i></button>
+                    <button class="button is-danger deactivate-button" data-id="{{ plant._id }}"><i class="fas fa-times"></i></button>
                     <form action="{{ url_for('care_journal', plant_id=plant._id) }}" method="get">
                         <button type="submit" class="button is-primary">View Care Journal</button>
                     </form>
@@ -163,6 +165,79 @@
                 document.getElementById('addPlantModal').classList.remove('is-active');
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener für Update-Buttons
+            const updateButtons = document.querySelectorAll('.update-button');
+            updateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const plantId = this.getAttribute('data-id');
+                    updatePlant(plantId);
+                });
+            });
+        
+            // Event listener für Deactivate-Buttons
+            const deactivateButtons = document.querySelectorAll('.deactivate-button');
+            deactivateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const plantId = this.getAttribute('data-id');
+                    deactivatePlant(plantId);
+                });
+            });
+        });
+        
+        function updatePlant(plantId) {
+            // Hier könntest du ein Formular mit den Daten der Pflanze anzeigen
+            // Für dieses Beispiel nehmen wir an, dass du eine einfache Alert-Nachricht ausgibst
+            alert('Update-Funktion für Pflanze mit ID ' + plantId);
+        
+            // Hier würde normalerweise ein Formular mit AJAX versendet werden
+            // Beispielcode für einen AJAX-Request:
+            fetch(`/update-plant/${plantId}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: 'Neuer Pflanzenname', // Daten aus einem Formular
+                    description: 'Neue Beschreibung'
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => {
+                  console.log(data);
+                  if (data.status === 'success') {
+                      window.location.reload(); // Seite neu laden, um die Änderungen anzuzeigen
+                  }
+            }).catch(error => console.error('Fehler:', error));
+        }
+        
+        function deactivatePlant(plantId) {
+            if (confirm('Sind Sie sicher, dass Sie diese Pflanze deaktivieren möchten?')) {
+                fetch(`/deactivate-plant/${plantId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();  // Dies sollte nur ausgeführt werden, wenn die Antwort JSON ist
+                })
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 'success') {
+                        window.location.reload(); // Seite neu laden, um die Änderungen anzuzeigen
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Es gab einen Fehler beim Verarbeiten Ihrer Anfrage: ' + error.message);
+                });
+            }
+        }
+        
     </script>
     
     
