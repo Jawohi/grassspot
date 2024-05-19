@@ -39,8 +39,20 @@ class Plant:
         plants = plants_collection.find({'status': 'active'}, projection={"created_at": False})
         return [Plant(**plant) for plant in plants]
 
-    
-
+    @classmethod
+    def deactivate(cls, plant_id):
+        try:
+            result = plants_collection.update_one(
+                {'_id': ObjectId(plant_id)},
+                {'$set': {'status': 'inactive'}}
+            )
+            if result.modified_count == 1:
+                return True, "Plant has been successfully deactivated."
+            else:
+                return False, "No changes made. Plant may already be inactive or doesn't exist."
+        except Exception as e:
+            return False, str(e)
+        
 class CareJournalEntry:
     def __init__(self, _id, plant_id, user_id, entry_date, notes, images, status):
         self._id = _id

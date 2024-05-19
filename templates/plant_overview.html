@@ -213,18 +213,31 @@
         
         function deactivatePlant(plantId) {
             if (confirm('Sind Sie sicher, dass Sie diese Pflanze deaktivieren möchten?')) {
-                // Send a POST request to deactivate the plant
                 fetch(`/deactivate-plant/${plantId}`, {
-                    method: 'POST'
-                }).then(response => response.json())
-                  .then(data => {
-                      console.log(data);
-                      if (data.status === 'success') {
-                          window.location.reload(); // Reload the page to reflect changes
-                      }
-                }).catch(error => console.error('Error:', error));
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();  // Dies sollte nur ausgeführt werden, wenn die Antwort JSON ist
+                })
+                .then(data => {
+                    console.log(data);
+                    if (data.status === 'success') {
+                        window.location.reload(); // Seite neu laden, um die Änderungen anzuzeigen
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Es gab einen Fehler beim Verarbeiten Ihrer Anfrage: ' + error.message);
+                });
             }
         }
+        
     </script>
     
     

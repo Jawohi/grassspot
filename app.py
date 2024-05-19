@@ -137,25 +137,13 @@ def update_plant(plant_id):
 
 
 @app.route('/deactivate-plant/<plant_id>', methods=['POST'])
-@login_required
 def deactivate_plant(plant_id):
-    try:
-        # Pflanze in der Datenbank finden
-        plant = Plant.get_by_id(plant_id)
-        if not plant:
-            flash('Pflanze nicht gefunden.', 'error')
-            return redirect(url_for('index'))
-
-        # Pflanze als inaktiv markieren
-        plant.status = 'inactive'
-        plant.save()  # Änderungen speichern
-
-        flash('Pflanze wurde erfolgreich deaktiviert.', 'success')
-        return redirect(url_for('index'))
-
-    except Exception as e:
-        flash(f'Fehler beim Deaktivieren der Pflanze: {str(e)}', 'error')
-        return redirect(url_for('index'))
+    success, message = Plant.deactivate_plant(plant_id)
+    if success:
+        response = {'status': 'success', 'message': message}
+    else:
+        response = {'status': 'error', 'message': message}
+    return jsonify(response), 200 if success else 400
 
 
 @app.route('/care-journal/<plant_id>', methods=['GET'])
