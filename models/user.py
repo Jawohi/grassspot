@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from pymongo import MongoClient
 import bcrypt
 from bson import ObjectId
+import os
 
 # Laden der Umgebungsvariablen
 MONGO_URI = os.getenv('MONGO_URI')
