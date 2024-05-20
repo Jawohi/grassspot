@@ -40,7 +40,7 @@ class Plant:
         return [Plant(**plant) for plant in plants]
 
     @classmethod
-    def deactivate(cls, plant_id):
+    def deactivate_plant(cls, plant_id):
         try:
             result = plants_collection.update_one(
                 {'_id': ObjectId(plant_id)},

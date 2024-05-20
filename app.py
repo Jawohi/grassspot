@@ -9,16 +9,13 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES
 import bcrypt
 import os
 
-# Pfad zur .env-Datei korrekt ermitteln und laden
-dotenv_path = find_dotenv()
-load_dotenv(dotenv_path)
 
-print("Working directory:", dotenv_path)
+load_dotenv() 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "763fa0b8072a082a17dd9e52721bb2e"
-app.config['MONGO_URI'] = "mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/Grassspot_DB"
-app.config['UPLOADED_PHOTOS_DEST'] = "static/images"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+app.config['UPLOADED_PHOTOS_DEST'] = os.getenv('UPLOADED_PHOTOS_DEST')
 
 
 

@@ -1,0 +1,3 @@
+SECRET_KEY=763fa0b8072a082a17dd9e52721bb2e
+MONGO_URI=mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/Grassspot_DB
+UPLOADED_PHOTOS_DEST=static/images
