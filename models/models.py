@@ -1,13 +1,19 @@
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
+import os
 
-
-
-client = MongoClient('mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/')
-db = client['Grassspot_DB']
+# Laden der Umgebungsvariablen
+MONGO_URI = os.getenv('MONGO_URI')
+DB_NAME = os.getenv('DB_NAME', 'Grassspot_DB') 
+ 
+client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
 plants_collection = db['plants']
 entries_collection = db['care_journal_entries']
+
+
+
 
 class Plant:
     def __init__(self, _id, name, description, image_url, sunlight, water_needs, temperature_range, status='active'):
@@ -26,7 +32,6 @@ class Plant:
     
     @staticmethod
     def get_by_id(plant_id):
-        # Query the database to fetch the plant with the specified ID
         plant_data = plants_collection.find_one({'_id': ObjectId(plant_id)})
         if plant_data and plant_data['status'] == 'active':
             return Plant(**plant_data)

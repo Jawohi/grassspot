@@ -3,9 +3,12 @@ from pymongo import MongoClient
 import bcrypt
 from bson import ObjectId
 
-# Create a connection to MongoDB
-client = MongoClient('mongodb+srv://jawohi_gs:myedMz0mDterDuRl@grasscluster.bcqofix.mongodb.net/')
-db = client['Grassspot_DB']  
+# Laden der Umgebungsvariablen
+MONGO_URI = os.getenv('MONGO_URI')
+DB_NAME = os.getenv('DB_NAME', 'Grassspot_DB')  
+
+client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
 users_collection = db['users']  
 
 
