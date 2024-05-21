@@ -1,0 +1,137 @@
+[{
+  "_id": {
+    "$oid": "661cfb25545a559e8efe4981"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af04c"
+  },
+  "user_id": "66196b7ba20cc7084a659114",
+  "entry_date": {
+    "$date": "2024-04-15T00:00:00.000Z"
+  },
+  "notes": "Test",
+  "images": [],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "661cfe6d6303d5e204e275ed"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af04c"
+  },
+  "user_id": "66196b7ba20cc7084a659114",
+  "entry_date": {
+    "$date": "2024-04-15T00:00:00.000Z"
+  },
+  "notes": "Test",
+  "images": [
+    "images/licensed-image_4.jpg"
+  ],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "661d02486303d5e204e275ee"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af054"
+  },
+  "user_id": "66196b7ba20cc7084a659114",
+  "entry_date": {
+    "$date": "2024-04-15T00:00:00.000Z"
+  },
+  "notes": "Äste gestutzt",
+  "images": [
+    "images/licensed-image_5.jpg"
+  ],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "6621400edb787d74c547f484"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af04c"
+  },
+  "user_id": "66196b7ba20cc7084a659114",
+  "entry_date": {
+    "$date": "2024-04-18T00:00:00.000Z"
+  },
+  "notes": "Test3",
+  "images": [],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "664bd13ed523eafe1c09a486"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af056"
+  },
+  "user_id": "661bdc154bfc114b3a944f20",
+  "entry_date": "",
+  "notes": "",
+  "images": [],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "664bd14bd523eafe1c09a487"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af056"
+  },
+  "user_id": "661bdc154bfc114b3a944f20",
+  "entry_date": {
+    "$date": "2024-05-10T00:00:00.000Z"
+  },
+  "notes": "asdasd",
+  "images": [],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "664bd3e9211cb0c64c474f46"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af052"
+  },
+  "user_id": "661bdc154bfc114b3a944f20",
+  "entry_date": {
+    "$date": "2024-04-10T00:00:00.000Z"
+  },
+  "notes": "Test",
+  "images": [],
+  "status": "inactive"
+},
+{
+  "_id": {
+    "$oid": "664be626887b2c1e4c2851ef"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af052"
+  },
+  "user_id": "661bdc154bfc114b3a944f20",
+  "entry_date": {
+    "$date": "2024-05-17T00:00:00.000Z"
+  },
+  "notes": "Test",
+  "images": [],
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "664bede5f41eff554ed476f3"
+  },
+  "plant_id": {
+    "$oid": "647db5f5fb73c14c308af050"
+  },
+  "user_id": "66196b7ba20cc7084a659114",
+  "entry_date": {
+    "$date": "2024-05-09T00:00:00.000Z"
+  },
+  "notes": "Test",
+  "images": [],
+  "status": "active"
+}]
