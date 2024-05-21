@@ -181,6 +181,13 @@ def add_entry(plant_id):
 
         return redirect(url_for('care_journal', plant_id=plant_id))
 
+@app.route('/deactivate-entry/<entry_id>', methods=['POST'])
+def deactivate_entry(entry_id):
+    success, message = CareJournalEntry.deactivate_entry(entry_id)
+    if success:
+        return jsonify({'status': 'success', 'message': 'Eintrag erfolgreich deaktiviert.'})
+    else:
+        return jsonify({'status': 'error', 'message': message}), 400
 
 
 

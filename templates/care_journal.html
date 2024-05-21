@@ -79,10 +79,14 @@
                         No Image
                     {% endif %}
                 </td>
+                <td>
+                    <button class="button is-warning update-button" data-id="{{ entry._id }}"><i class="fas fa-edit"></i></button>
+                    <button class="button is-danger deactivate-button" data-id="{{ entry._id }}"><i class="fas fa-times"></i></button>
+                </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="3">No entries found.</td>
+                <td colspan="3">Keine Einträge gefunden.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -105,5 +109,45 @@
         document.getElementById('cancelEntry').addEventListener('click', function() {
             document.getElementById('addEntryModal').classList.remove('is-active');
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Modal zum Update öffnen oder direkt Update Formular anzeigen
+        const updateButtons = document.querySelectorAll('.update-button');
+        updateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const entryId = this.getAttribute('data-id');
+                alert('Update für Eintrag ID ' + entryId);  // Beispiel-Implementierung
+            });
+        });
+
+        // Deaktivieren des Eintrags
+        const deactivateButtons = document.querySelectorAll('.deactivate-button');
+        deactivateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const entryId = this.getAttribute('data-id');
+                if (confirm('Möchten Sie diesen Eintrag wirklich deaktivieren?')) {
+                    fetch(`/deactivate-entry/${entryId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            window.location.reload();  // Seite neu laden, um die Änderungen anzuzeigen
+                        } else {
+                            alert('Fehler: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fehler beim Deaktivieren des Eintrags:', error);
+                    });
+                }
+            });
+        });
+    });
+
+
     </script>
 {% endblock %}

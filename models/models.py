@@ -6,7 +6,7 @@ import os
 # Laden der Umgebungsvariablen
 MONGO_URI = os.getenv('MONGO_URI')
 DB_NAME = os.getenv('DB_NAME', 'Grassspot_DB') 
- 
+
 client = MongoClient(MONGO_URI)
 db = client[DB_NAME]
 plants_collection = db['plants']
@@ -73,6 +73,20 @@ class CareJournalEntry:
         # Query the database to fetch care journal entries for the given plant_id
         entries = entries_collection.find({'plant_id': ObjectId(plant_id)})
         return [CareJournalEntry(**entry) for entry in entries]
+    
+    @classmethod
+    def deactivate_entry(cls, entry_id):
+        try:
+            result = entries_collection.update_one(
+                {'_id': ObjectId(entry_id)},
+                {'$set': {'status': 'inactive'}}
+            )
+            if result.modified_count == 1:
+                return True, "Eintrag wurde erfolgreich deaktiviert."
+            else:
+                return False, "Keine Änderung vorgenommen. Der Eintrag ist möglicherweise bereits inaktiv oder existiert nicht."
+        except Exception as e:
+            return False, str(e)
     
     def save(self):
         entries_collection.insert_one(self.__dict__)
