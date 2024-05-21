@@ -1,0 +1,376 @@
+[{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af04c"
+  },
+  "name": "Rose",
+  "description": "A beautiful flowering plant known for its captivating scent.",
+  "image_url": "https://example.com/rose.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "15-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af051"
+  },
+  "name": "Sunflower",
+  "description": "A cheerful flower that follows the sun's movement throughout the day.",
+  "image_url": "https://example.com/sunflower.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "15-30°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af052"
+  },
+  "name": "Bamboo",
+  "description": "A fast-growing plant often used for its decorative and functional purposes.",
+  "image_url": "https://example.com/bamboo.jpg",
+  "sunlight": "Partial sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "18-30°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af057"
+  },
+  "name": "Carnation",
+  "description": "A fragrant flower often used in bouquets and floral arrangements.",
+  "image_url": "https://example.com/carnation.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "15-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af04d"
+  },
+  "name": "Lavender",
+  "description": "An aromatic herb with lovely purple flowers.",
+  "image_url": "https://example.com/lavender.jpg",
+  "sunlight": "Partial sunlight",
+  "water_needs": "Low",
+  "temperature_range": "20-30°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af04f"
+  },
+  "name": "Orchid",
+  "description": "An elegant flower often associated with beauty and luxury.",
+  "image_url": "https://example.com/orchid.jpg",
+  "sunlight": "Filtered sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "18-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af050"
+  },
+  "name": "Cactus",
+  "description": "A succulent plant known for its ability to thrive in arid conditions.",
+  "image_url": "https://example.com/cactus.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Low",
+  "temperature_range": "20-35°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af05b"
+  },
+  "name": "Hibiscus",
+  "description": "A tropical flower known for its large, colorful blooms.",
+  "image_url": "https://example.com/hibiscus.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "20-35°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af055"
+  },
+  "name": "Palm",
+  "description": "An iconic tropical plant with large, fan-shaped leaves.",
+  "image_url": "https://example.com/palm.jpg",
+  "sunlight": "Partial sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "20-30°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af058"
+  },
+  "name": "Lily",
+  "description": "An elegant flower available in various colors and sizes.",
+  "image_url": "https://example.com/lily.jpg",
+  "sunlight": "Partial sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "18-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af04e"
+  },
+  "name": "Tulip",
+  "description": "A classic spring flower with vibrant colors.",
+  "image_url": "https://example.com/tulip.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "10-20°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af053"
+  },
+  "name": "Fern",
+  "description": "A leafy green plant that thrives in shaded and humid environments.",
+  "image_url": "https://example.com/fern.jpg",
+  "sunlight": "Shade",
+  "water_needs": "High",
+  "temperature_range": "15-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af054"
+  },
+  "name": "Daisy",
+  "description": "A simple yet charming flower often associated with innocence and purity.",
+  "image_url": "https://example.com/daisy.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "10-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af056"
+  },
+  "name": "Aloe Vera",
+  "description": "A succulent plant with medicinal properties known for its soothing gel.",
+  "image_url": "https://example.com/aloe_vera.jpg",
+  "sunlight": "Full sunlight",
+  "water_needs": "Low",
+  "temperature_range": "15-25°C",
+  "status": "inactive"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af059"
+  },
+  "name": "Poinsettia",
+  "description": "A vibrant plant commonly associated with the holiday season.",
+  "image_url": "https://example.com/poinsettia.jpg",
+  "sunlight": "Partial sunlight",
+  "water_needs": "Moderate",
+  "temperature_range": "15-25°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647db5f5fb73c14c308af05a"
+  },
+  "name": "Snake Plant",
+  "description": "A resilient plant with tall, upright leaves that require minimal care.",
+  "image_url": "https://example.com/snake_plant.jpg",
+  "sunlight": "Filtered sunlight",
+  "water_needs": "Low",
+  "temperature_range": "15-30°C",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647dc2114fdcd0f73593f7a4"
+  },
+  "name": "Basil",
+  "description": "Basil is a popular culinary herb known for its strong aroma and flavor. It is commonly used in various cuisines, particularly in Italian dishes.",
+  "image_url": "https://example.com/basil.jpg",
+  "sunlight": "Full sun",
+  "water_needs": "Regular watering",
+  "temperature_range": "15°C - 27°C",
+  "created_at": {
+    "$date": "2023-06-05T13:08:01.386Z"
+  },
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647f51ca311ea32e8e16eff2"
+  },
+  "name": "test",
+  "description": "test",
+  "image_url": "test",
+  "sunlight": "test",
+  "water_needs": "test",
+  "temperature_range": "",
+  "created_at": "2023-06-06T17:33:30.383049",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "647f51e1311ea32e8e16eff3"
+  },
+  "name": "test",
+  "description": "test",
+  "image_url": "test",
+  "sunlight": "test",
+  "water_needs": "test",
+  "temperature_range": "test",
+  "created_at": "2023-06-06T17:33:53.095748",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "65a5bf1082bab46d6f8e9731"
+  },
+  "name": "Hanf",
+  "description": "Net so einfach ",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-01-16T00:26:08.564182",
+  "status": "inactive"
+},
+{
+  "_id": {
+    "$oid": "661ee32983a5cc776702839a"
+  },
+  "name": "Test",
+  "description": "Test",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-16T22:44:25.574979",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "661ff02d1fca051b5f76a26f"
+  },
+  "name": "Test",
+  "description": "",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-17T17:52:13.502372",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "661ff0511fca051b5f76a270"
+  },
+  "name": "Test",
+  "description": "",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-17T17:52:49.775389",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "661ff0531fca051b5f76a271"
+  },
+  "name": "Test",
+  "description": "",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-17T17:52:51.076124",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "66213b0e637f7331f98305cf"
+  },
+  "name": "Test",
+  "description": "Test",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T17:23:58.205834",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "66213db3637f7331f98305d0"
+  },
+  "name": "Test",
+  "description": "Test",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T17:35:15.688552",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "66213e08db787d74c547f483"
+  },
+  "name": "Test",
+  "description": "",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T17:36:40.369636",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "66216b0adb787d74c547f485"
+  },
+  "name": "Test",
+  "description": "",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T20:48:42.842162",
+  "status": "active"
+},
+{
+  "_id": {
+    "$oid": "66216e6ae2f79c48b2ab1ab4"
+  },
+  "name": "Hibiskus",
+  "description": "Ladida",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T21:03:06.209758",
+  "status": "inactive"
+},
+{
+  "_id": {
+    "$oid": "662170153dcd65b3358305a3"
+  },
+  "name": "Hibiskus",
+  "description": "Ladida",
+  "image_url": "",
+  "sunlight": "",
+  "water_needs": "",
+  "temperature_range": "",
+  "created_at": "2024-04-18T21:10:13.581436",
+  "status": "inactive"
+}]
