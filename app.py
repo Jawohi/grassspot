@@ -183,11 +183,36 @@ def add_entry(plant_id):
 
 @app.route('/deactivate-entry/<entry_id>', methods=['POST'])
 def deactivate_entry(entry_id):
+    # Funktion zum Deaktivieren eines Eintrags
     success, message = CareJournalEntry.deactivate_entry(entry_id)
     if success:
-        return jsonify({'status': 'success', 'message': 'Eintrag erfolgreich deaktiviert.'})
+        response = {'status': 'success', 'message': message}
     else:
-        return jsonify({'status': 'error', 'message': message}), 400
+        response = {'status': 'error', 'message': message}
+    return jsonify(response)
+
+@app.route('/update-entry/<entry_id>', methods=['POST'])
+def update_entry(entry_id):
+    # Daten aus der Anfrage auslesen
+    data = request.get_json()
+    if not data:
+        return jsonify({'status': 'error', 'message': 'No data provided'}), 400
+    
+    # Versuche, den Eintrag zu aktualisieren
+    success, message = CareJournalEntry.update_entry(entry_id, data)
+    if success:
+        response = {'status': 'success', 'message': message}
+    else:
+        response = {'status': 'error', 'message': message}
+    return jsonify(response)
+
+@app.route('/get-entry/<entry_id>')
+def get_entry(entry_id):
+    entry = CareJournalEntry.get_by_id(entry_id)
+    if entry:
+        return jsonify({'status': 'success', 'entry': entry.to_dict()}), 200
+    return jsonify({'status': 'error', 'message': 'Eintrag nicht gefunden'}), 404
+
 
 
 

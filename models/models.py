@@ -68,25 +68,54 @@ class CareJournalEntry:
         self.images = images
         self.status = status
     
+
     @staticmethod
     def get_entries_by_plant_id(plant_id):
         # Query the database to fetch care journal entries for the given plant_id
         entries = entries_collection.find({'plant_id': ObjectId(plant_id)})
         return [CareJournalEntry(**entry) for entry in entries]
     
+    def to_dict(self):
+        return {
+            '_id': str(self._id),  # ObjectId zu string konvertieren
+            'plant_id': str(self.plant_id),
+            'user_id': str(self.user_id),
+            'entry_date': self.entry_date.isoformat() if self.entry_date else None,
+            'notes': self.notes,
+            'images': self.images,
+            'status': self.status
+        }
+    
+    @staticmethod
+    def get_by_id(entry_id):
+        entry_data = entries_collection.find_one({'_id': ObjectId(entry_id)})
+        if entry_data:
+            return CareJournalEntry(**entry_data)
+        return None
+
     @classmethod
     def deactivate_entry(cls, entry_id):
-        try:
-            result = entries_collection.update_one(
-                {'_id': ObjectId(entry_id)},
-                {'$set': {'status': 'inactive'}}
-            )
-            if result.modified_count == 1:
-                return True, "Eintrag wurde erfolgreich deaktiviert."
-            else:
-                return False, "Keine Änderung vorgenommen. Der Eintrag ist möglicherweise bereits inaktiv oder existiert nicht."
-        except Exception as e:
-            return False, str(e)
+        # Logik zum Deaktivieren des Eintrags
+        result = entries_collection.update_one(
+            {'_id': ObjectId(entry_id)},
+            {'$set': {'status': 'inactive'}}
+        )
+        if result.modified_count == 1:
+            return True, "Eintrag wurde erfolgreich deaktiviert."
+        else:
+            return False, "Keine Änderungen vorgenommen. Eintrag ist bereits deaktiviert oder existiert nicht."
+
+    @classmethod
+    def update_entry(cls, entry_id, data):
+        # Logik zum Aktualisieren des Eintrags
+        result = entries_collection.update_one(
+            {'_id': ObjectId(entry_id)},
+            {'$set': data}
+        )
+        if result.modified_count == 1:
+            return True, "Eintrag wurde erfolgreich geändiert."
+        else:
+            return False, "Keine Änderungen vorgenommen. Eintrag ist bereits geändert oder existiert nicht."
     
     def save(self):
         entries_collection.insert_one(self.__dict__)

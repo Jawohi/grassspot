@@ -14,8 +14,11 @@
         <p><strong>Status:</strong> {{ plant.status }}</p>
     </div>
 
-    <!-- Button to trigger the modal -->
+    <!-- Button für das Erstellen eines Eintrags -->
     <button class="button is-primary" id="addEntryButton">Add Entry</button>
+
+    <!-- Container für dynamisch hinzugefügte Bilder -->
+    <div id="existingImages" class="existing-images"></div>
 
     <!-- Modal -->
     <div class="modal" id="addEntryModal">
@@ -26,7 +29,7 @@
                 <button class="delete" aria-label="close" id="closeModal"></button>
             </header>
             <section class="modal-card-body">
-                <!-- Form inputs for care journal entry -->
+                <!-- Formular zum Erstellen eines Eintrags -->
                 <form id="entryForm" method="POST" action="{{ url_for('add_entry', plant_id=plant_id) }}" enctype="multipart/form-data">
                     <div class="field">
                         <label class="label">Date</label>
@@ -45,8 +48,13 @@
                     <div class="field">
                         <label class="label">Image Upload</label>
                         <div class="control">
-                            <input class="input" type="file" id="image" name="image" accept="image/*">
+                            <input class="input" type="file" id="image" name="image" accept="image/*" multiple>
                         </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label class="label">Existing Images</label>
+                        <div class="control" id="existingImagesContainer"></div>
                     </div>
                 </form>
             </section>
@@ -58,13 +66,14 @@
         </div>
     </div>
 
-    <!-- Care Journal Entries Table -->
+    <!-- Tabelle für Pflegetagebuch-Einträge -->
     <table class="table is-fullwidth is-striped">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Notes</th>
-                <th>Image</th>
+                <th>Datum</th>
+                <th>Notizen</th>
+                <th>Bilder</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -86,68 +95,116 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="3">Keine Einträge gefunden.</td>
+                <td colspan="4">Keine Einträge gefunden.</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
     <script>
-        // Modal interaction
-        document.getElementById('addEntryButton').addEventListener('click', function() {
-            document.getElementById('addEntryModal').classList.add('is-active');
-        });
-        
-        document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('addEntryModal').classList.remove('is-active');
-        });
-
-        document.getElementById('submitEntry').addEventListener('click', function() {
-            document.getElementById('entryForm').submit();
-        });
-
-        document.getElementById('cancelEntry').addEventListener('click', function() {
-            document.getElementById('addEntryModal').classList.remove('is-active');
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
-        // Modal zum Update öffnen oder direkt Update Formular anzeigen
-        const updateButtons = document.querySelectorAll('.update-button');
-        updateButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const entryId = this.getAttribute('data-id');
-                alert('Update für Eintrag ID ' + entryId);  // Beispiel-Implementierung
+            // Modal Interaktion
+            document.getElementById('addEntryButton').addEventListener('click', function() {
+                document.getElementById('addEntryModal').classList.add('is-active');
             });
-        });
+            
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('addEntryModal').classList.remove('is-active');
+            });
 
-        // Deaktivieren des Eintrags
-        const deactivateButtons = document.querySelectorAll('.deactivate-button');
-        deactivateButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const entryId = this.getAttribute('data-id');
-                if (confirm('Möchten Sie diesen Eintrag wirklich deaktivieren?')) {
-                    fetch(`/deactivate-entry/${entryId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
+            document.getElementById('submitEntry').addEventListener('click', function() {
+                document.getElementById('entryForm').submit();
+            });
+
+            document.getElementById('cancelEntry').addEventListener('click', function() {
+                document.getElementById('addEntryModal').classList.remove('is-active');
+            });
+
+            // Modal zum Update öffnen oder direkt Update Formular anzeigen
+            const updateButtons = document.querySelectorAll('.update-button');
+            updateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const entryId = this.getAttribute('data-id');
+                    fetch(`/get-entry/${entryId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
-                            window.location.reload();  // Seite neu laden, um die Änderungen anzuzeigen
+                            // Daten in das Formular einfüllen
+                            document.getElementById('entry_date').value = new Date(data.entry.entry_date).toISOString().slice(0, 10); // Datum anpassen
+                            document.getElementById('notes').value = data.entry.notes;
+                            
+                            // Falls es ein Bild gibt, behandeln
+                            const existingImages = document.getElementById('existing-images');
+                            existingImages.innerHTML = '';
+                            if (data.entry.images && data.entry.images.length > 0) {
+                                data.entry.images.forEach(image => {
+                                    const imageElement = document.createElement('img');
+                                    imageElement.src = `${window.location.origin}/static/${image}`;
+                                    imageElement.alt = 'Existing Image';
+                                    imageElement.style.width = '100px';
+                                    imageElement.style.height = 'auto';
+                                    imageElement.style.marginRight = '10px';
+                                    imageElement.style.cursor = 'pointer';
+                                    imageElement.dataset.imageUrl = `${window.location.origin}/static/${image}`;
+                                    imageElement.addEventListener('click', function() {
+                                        const imageInput = document.createElement('input');
+                                        imageInput.type = 'file';
+                                        imageInput.setAttribute('accept', 'image/*');
+                                        imageInput.onchange = function() {
+                                            const file = this.files[0];
+                                            const reader = new FileReader();
+                                            reader.onload = function(event) {
+                                                imageElement.src = event.target.result;
+                                            }
+                                            reader.readAsDataURL(file);
+                                        }
+                                        imageElement.replaceWith(imageInput);
+                                    });
+                                    existingImages.appendChild(imageElement);
+                                });
+                            }
+                            
+                            // Setze die Formular-Action auf Update
+                            document.getElementById('entryForm').action = `{{ url_for('update_entry', entry_id=entryId) }}`;
+                            
+                            // Öffne das Modal
+                            document.getElementById('addEntryModal').classList.add('is-active');
                         } else {
-                            alert('Fehler: ' + data.message);
+                            alert('Fehler beim Laden der Eintragsdaten: ' + data.message);
                         }
                     })
                     .catch(error => {
-                        console.error('Fehler beim Deaktivieren des Eintrags:', error);
+                        console.error('Fehler beim Abrufen des Eintrags:', error);
                     });
-                }
+                });
+            });
+
+            // Deaktivieren des Eintrags
+            const deactivateButtons = document.querySelectorAll('.deactivate-button');
+            deactivateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const entryId = this.getAttribute('data-id');
+                    if (confirm('Möchten Sie diesen Eintrag wirklich deaktivieren?')) {
+                        fetch(`/deactivate-entry/${entryId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                window.location.reload();  // Seite neu laden, um die Änderungen anzuzeigen
+                            } else {
+                                alert('Fehler: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fehler beim Deaktivieren des Eintrags:', error);
+                        });
+                    }
+                });
             });
         });
-    });
-
-
     </script>
 {% endblock %}
