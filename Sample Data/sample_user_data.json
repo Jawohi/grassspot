@@ -1,0 +1,14 @@
+[
+{
+  "_id": {
+    "$oid": "66196b7ba20cc7084a659114"
+  },
+  "username": "test2",
+  "password": {
+    "$binary": {
+      "base64": "JDJiJDEyJFpzQXJWWFk0T3RTVzdiWFV2cy5BZS5mazNieDlYUnpDY3lkOG41ZTZnSUouMmlxdk9TNmtx",
+      "subType": "00"
+    }
+  },
+  "status": "active"
+}]
